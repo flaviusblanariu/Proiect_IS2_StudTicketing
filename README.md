@@ -1,7 +1,8 @@
 # Proiect_IS2
-Acesta este proiectul la materia IS2 al lui Blanariu Flavius, al lui Ion Darius și al lui Năstase Mihnea. Dorim să implementăm o aplicație de ticketing pentru situațiile apărute în cadrul facultății.
+Acesta este proiectul la materia IS2 al lui Blanariu Flavius, al lui Ion Darius și al lui Năstase Mihnea. Dorim să implementăm o aplicație de ticketing pentru situațiile apărut
+e în cadrul facultății.
 
-Link către Github repo: https://github.com/flaviusblanariu/Proiect_IS2 
+Link către Github repo: https://github.com/flaviusblanariu/Proiect_IS2_StudTicketing
 
 5 User Stories:
 
