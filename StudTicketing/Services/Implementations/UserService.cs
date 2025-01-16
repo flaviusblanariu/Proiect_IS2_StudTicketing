@@ -5,8 +5,8 @@ using StudTicketing.Services.Abstractions;
 
 namespace StudTicketing.Services.Implementations;
 
-using StudTicketing_Run.Services.Abstractions;
-using StudTicketing_Run.DataTransferObjects;
+using StudTicketing.Services.Abstractions;
+using StudTicketing.DataTransferObjects;
 
 public class UserService(TicketingDatabaseContext databaseContext) : IUserService
 

@@ -1,32 +1,39 @@
 using Microsoft.AspNetCore.Mvc;
+using StudTicketing.Database.Models;
+using System.Collections.Generic;
 
-namespace StudTicketing.Controllers;
-
-[ApiController]
-[Route("[controller]")]
-public class StudTicketingController : ControllerBase
+namespace StudTicketing.Controllers
 {
-    private static readonly string[] Summaries = new[]
+    [ApiController]
+    [Route("[controller]")]
+    public class StudTicketingController : ControllerBase
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        private static readonly string[] Departments = new[]
+        {
+            "Studenti", "Profesori", "Secretariat", "Decanat", "Camin"
+        };
 
-    private readonly ILogger<StudTicketingController> _logger;
+        private readonly ILogger<StudTicketingController> _logger;
 
-    public StudTicketingController(ILogger<StudTicketingController> logger)
-    {
-        _logger = logger;
-    }
+        public StudTicketingController(ILogger<StudTicketingController> logger)
+        {
+            _logger = logger;
+        }
 
-    [HttpGet(Name = "Tichete facultate")]
-    public IEnumerable<StudTicketing_Run> Get()
-    {
-        return Enumerable.Range(1, 5).Select(index => new StudTicketing_Run
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+        [HttpGet(Name = "GetTickets")]
+        public IEnumerable<Ticket> Get()
+        {
+            return Enumerable.Range(1, 5).Select(index => new Ticket
+                {
+                    Id = index,
+                    Title = $"Ticket {index}",
+                    Department = Departments[Random.Shared.Next(Departments.Length)],
+                    Description = "Descriere ticket",
+                    Status = (TicketStatus)Random.Shared.Next(0, 4),
+                    CreatedDate = DateTime.Now.AddDays(-index),
+                    UpdatedDate = DateTime.Now
+                })
+                .ToArray();
+        }
     }
 }
