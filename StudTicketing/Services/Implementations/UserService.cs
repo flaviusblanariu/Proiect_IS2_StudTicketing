@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudTicketing.Database;
+using StudTicketing.Database.Models;
 using StudTicketing.Services.Abstractions;
 
 namespace StudTicketing.Services.Implementations;
 
-using StudTicketing.Services.Abstractions;
-using StudTicketing.DataTransferObjects;
+using StudTicketing_Run.Services.Abstractions;
+using StudTicketing_Run.DataTransferObjects;
 
 public class UserService(TicketingDatabaseContext databaseContext) : IUserService
 
@@ -13,10 +14,12 @@ public class UserService(TicketingDatabaseContext databaseContext) : IUserServic
     public async Task AddUser(UsersAddRecord user)
     {
         // La adaugare mapam datele din obiect pe entitatea din baza de date si il atasam la context
-        await databaseContext.Set<User>().AddAsync(new User()
+        await databaseContext.Set<Users>().AddAsync(new Users()
         {
             Nume = user.Nume,
             Prenume = user.Prenume,
+            Functie = user.Functie,
+            Telefon = user.Telefon,
             Email = user.Email
         });
 
@@ -27,8 +30,8 @@ public class UserService(TicketingDatabaseContext databaseContext) : IUserServic
     public async Task UpdateUser(UsersUpdateRecord user)
     {
         // Extragem din baza de date elementul care va fi actualizat
-        var entry = await databaseContext.Set<User>()
-            .Where(e => e.Id == user.Id)
+        var entry = await databaseContext.Set<Users>()
+            .Where(e => e.id == user.id)
             .FirstOrDefaultAsync();
 
         if (entry == null)
@@ -37,12 +40,14 @@ public class UserService(TicketingDatabaseContext databaseContext) : IUserServic
         }
 
         // Actualizam campurile
-        entry.FirstName = user.FirstName;
-        entry.LastName = user.LastName;
+        entry.Nume = user.Nume;
+        entry.Prenume = user.Prenume;
+        entry.Functie = user.Functie;
+        entry.Telefon = user.Telefon;
         entry.Email = user.Email;
 
         // (Optional) actualizam si in context entitate
-        databaseContext.Set<User>().Update(entry);
+        databaseContext.Set<Users>().Update(entry);
 
         // In final trimitem modificarile catre baza de date
         await databaseContext.SaveChangesAsync();
@@ -51,7 +56,7 @@ public class UserService(TicketingDatabaseContext databaseContext) : IUserServic
     public async Task DeleteUser(int userId)
     {
         // Cautam elementul dupa ID in baza de date
-        var entry = await databaseContext.Set<User>().Where(e => e.Id == userId).FirstOrDefaultAsync();
+        var entry = await databaseContext.Set<Users>().Where(e => e.id == userId).FirstOrDefaultAsync();
 
         if (entry == null)
         {
@@ -59,59 +64,66 @@ public class UserService(TicketingDatabaseContext databaseContext) : IUserServic
         }
 
         // Il stergem din context
-        databaseContext.Set<User>().Remove(entry);
+        databaseContext.Set<Users>().Remove(entry);
         
         // Si trimitem modificarile catre baza de date
         await databaseContext.SaveChangesAsync();
     }
 
-    public async Task<UserRecord> GetUser(int userId)
+    public async Task<UsersRecord> GetUser(int userId)
     {
-        return await databaseContext.Set<User>()
-            .Where(e => e.Id == userId) // Cautam dupa ID elementul
-            .Select(e => new UserRecord // Facem o proiectie si mapam elementul la un obiect de tranfer
+        return await databaseContext.Set<Users>()
+            .Where(e => e.id == userId) // Cautam dupa ID elementul
+            .Select(e => new UsersRecord // Facem o proiectie si mapam elementul la un obiect de tranfer
             {
-                Id = e.Id,
-                Email = e.Email,
-                FirstName = e.FirstName,
-                LastName = e.LastName
+                id = e.id,
+                Nume = e.Nume,
+                Prenume = e.Prenume,
+                Functie = e.Functie,
+                Telefon = e.Telefon,
+                Email = e.Email
+                
             }).FirstAsync(); // La final extragem un singur element
     }
 
-    public Task<List<UserRecord>> GetUsers()
+    public Task<List<UsersRecord>> GetUsers()
     {
         throw new NotImplementedException();
     }
 
-    public async Task<List<UserRecord>> GetUsers(int userId)
+    public async Task<List<UsersRecord>> GetUsers(int userId)
     {
-        return await databaseContext.Set<User>()
-            .Where(e => e.Id == userId) // Cautam dupa ID elementul
-            .Select(e => new UserRecord // Facem o proiectie si mapam elementul la un obiect de tranfer
+        return await databaseContext.Set<Users>()
+            .Where(e => e.id == userId) // Cautam dupa ID elementul
+            .Select(e => new UsersRecord // Facem o proiectie si mapam elementul la un obiect de tranfer
             {
-                Id = e.Id,
-                Email = e.Email,
-                FirstName = e.FirstName,
-                LastName = e.LastName
+                id = e.id,
+                Nume = e.Nume,
+                Prenume = e.Prenume,
+                Functie = e.Functie,
+                Telefon = e.Telefon,
+                Email = e.Email
             }).ToListAsync(); // La final extragem o lista de elemente
     }
 
-    public async Task<PaginationResponse<UserRecord>> GetPagedUsers(PaginationQueryParams query)
+    public async Task<PaginationResponse<UsersRecord>> GetPagedUsers(PaginationQueryParams query)
     {
-        return new PaginationResponse<UserRecord>()
+        return new PaginationResponse<UsersRecord>()
         {
             Page = query.Page,
             PageSize = query.PageSize,
-            PageCount = await databaseContext.Set<User>().CountAsync(),
-            Data = await databaseContext.Set<User>()
-                .Select(e => new UserRecord()
+            PageCount = await databaseContext.Set<Users>().CountAsync(),
+            Data = await databaseContext.Set<Users>()
+                .Select(e => new UsersRecord()
                 {
-                    Id = e.Id,
-                    FirstName = e.FirstName,
-                    LastName = e.LastName,
+                    id = e.id,
+                    Nume = e.Nume,
+                    Prenume = e.Prenume,
+                    Functie = e.Functie,
+                    Telefon = e.Telefon,
                     Email = e.Email
                 })
-                .OrderBy(e => e.Id)
+                .OrderBy(e => e.id)
                 .Skip((query.Page - 1) * query.PageSize)
                 .Take(query.PageSize)
                 .ToListAsync()

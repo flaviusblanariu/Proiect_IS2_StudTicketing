@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StudTicketing")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1fa796e32e80d337b73a0d0ee26d0a22747cee45")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ebd5df17c55e7fa9e502f32ad72876f1355d28d")]
 [assembly: System.Reflection.AssemblyProductAttribute("StudTicketing")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StudTicketing")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
