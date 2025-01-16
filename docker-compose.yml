@@ -1,0 +1,11 @@
+﻿version: "3.8"
+services: # definim serviciile
+  studticketing-service: # dam un nume la serviciu
+    image: studticketing/ticketing:0.0.1 # folosește imaginea creată anterior
+    environment: # adăugăm variabile de mediu ca și dicționar cheie-valoare
+      ASPNETCORE_ENVIRONMENT: "development"
+      ConnectionStrings__TicketingDatabase: "DataSource=/app/StudTicketing.db"
+    ports: # facem mapare de porturi, adică dacă accesăm portul 9090 se va trimite cererea către portul 8080 din container
+      - "9090:8080"
+    volumes: # definim și volume persiste ca să nu pierdem date, folderul database va apărea în container la /app/database
+      - ./database:/app/database
